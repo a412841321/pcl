@@ -24,8 +24,10 @@ endif()
 
 #OpenNI
 if(NOT WITH_OPENNI)
-    set(DEFAULT AUTO_OFF)
-    set(REASON "OpenNI was not found or was disabled by the user.")
+#    set(DEFAULT AUTO_OFF)
+#    set(REASON "OpenNI was not found or was disabled by the user.")
+    set(DEFAULT TRUE)
+    set(REASON)
 elseif(NOT ${DEFAULT} STREQUAL "AUTO_OFF")
     set(DEFAULT TRUE)
     set(REASON)
