@@ -106,15 +106,15 @@ namespace pcl
 
       private:
 
-        typedef pcl::PointXYZRGBA              PointXYZRGBA;
-        typedef pcl::PointCloud <PointXYZRGBA> CloudXYZRGBA;
-        typedef CloudXYZRGBA::Ptr              CloudXYZRGBAPtr;
-        typedef CloudXYZRGBA::ConstPtr         CloudXYZRGBAConstPtr;
+        typedef pcl::PointXYZI              PointXYZI;
+        typedef pcl::PointCloud <PointXYZI> CloudXYZI;
+        typedef CloudXYZI::Ptr              CloudXYZIPtr;
+        typedef CloudXYZI::ConstPtr         CloudXYZIConstPtr;
 
-        typedef pcl::PointXYZRGBNormal              PointXYZRGBNormal;
-        typedef pcl::PointCloud <PointXYZRGBNormal> CloudXYZRGBNormal;
-        typedef CloudXYZRGBNormal::Ptr              CloudXYZRGBNormalPtr;
-        typedef CloudXYZRGBNormal::ConstPtr         CloudXYZRGBNormalConstPtr;
+        typedef pcl::PointXYZINormal              PointXYZINormal;
+        typedef pcl::PointCloud <PointXYZINormal> CloudXYZINormal;
+        typedef CloudXYZINormal::Ptr              CloudXYZINormalPtr;
+        typedef CloudXYZINormal::ConstPtr         CloudXYZINormalConstPtr;
 
         typedef pcl::ihs::Mesh         Mesh;
         typedef pcl::ihs::MeshPtr      MeshPtr;
@@ -124,7 +124,7 @@ namespace pcl
         typedef boost::shared_ptr <Integration>       IntegrationPtr;
         typedef boost::shared_ptr <const Integration> IntegrationConstPtr;
 
-        typedef pcl::IntegralImageNormalEstimation <PointXYZRGBA, PointXYZRGBNormal> NormalEstimation;
+        typedef pcl::IntegralImageNormalEstimation <PointXYZI, PointXYZINormal> NormalEstimation;
         typedef boost::shared_ptr <NormalEstimation>                                 NormalEstimationPtr;
         typedef boost::shared_ptr <const NormalEstimation>                           NormalEstimationConstPtr;
 
@@ -173,7 +173,7 @@ namespace pcl
           */
         bool
         load (const std::string&    filename,
-              CloudXYZRGBNormalPtr& cloud,
+              CloudXYZINormalPtr& cloud,
               Eigen::Matrix4f&      T) const;
 
         /** \see http://doc.qt.digia.com/qt/qwidget.html#paintEvent

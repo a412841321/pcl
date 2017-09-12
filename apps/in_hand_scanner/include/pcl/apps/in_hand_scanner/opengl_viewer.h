@@ -110,10 +110,10 @@ namespace pcl
 
       public:
 
-        typedef pcl::PointXYZRGBNormal              PointXYZRGBNormal;
-        typedef pcl::PointCloud <PointXYZRGBNormal> CloudXYZRGBNormal;
-        typedef CloudXYZRGBNormal::Ptr              CloudXYZRGBNormalPtr;
-        typedef CloudXYZRGBNormal::ConstPtr         CloudXYZRGBNormalConstPtr;
+        typedef pcl::PointXYZINormal              PointXYZINormal;
+        typedef pcl::PointCloud <PointXYZINormal> CloudXYZINormal;
+        typedef CloudXYZINormal::Ptr              CloudXYZINormalPtr;
+        typedef CloudXYZINormal::ConstPtr         CloudXYZINormalConstPtr;
 
         typedef pcl::ihs::Mesh         Mesh;
         typedef pcl::ihs::MeshPtr      MeshPtr;
@@ -193,7 +193,7 @@ namespace pcl
           * \note This method takes some time for the conversion).
           */
         bool
-        addMesh (const CloudXYZRGBNormalConstPtr& cloud, const std::string& id, const Eigen::Isometry3d& T = Eigen::Isometry3d::Identity ());
+        addMesh (const CloudXYZINormalConstPtr& cloud, const std::string& id, const Eigen::Isometry3d& T = Eigen::Isometry3d::Identity ());
 
         /** \brief Remove the mesh with the given id.
           * \param[in] id Identifier of the mesh (results in a failure if the id does not exist).
@@ -331,7 +331,7 @@ namespace pcl
         typedef Eigen::Matrix <unsigned char, 3, Eigen::Dynamic> Colors;
         typedef Eigen::Matrix <unsigned char, 3, 256           > Colormap;
 
-        typedef boost::unordered_map <std::string, CloudXYZRGBNormalPtr> CloudXYZRGBNormalMap;
+        typedef boost::unordered_map <std::string, CloudXYZINormalPtr> CloudXYZINormalMap;
 
         typedef pcl::ihs::PointIHS         PointIHS;
         typedef pcl::ihs::CloudIHS         CloudIHS;

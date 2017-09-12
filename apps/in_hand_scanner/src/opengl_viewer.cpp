@@ -83,10 +83,10 @@ pcl::ihs::detail::FaceVertexMesh::FaceVertexMesh (const Mesh& mesh, const Eigen:
     exit (EXIT_FAILURE);
   }
 
-  for (CloudIHS::iterator it=vertices.begin (); it!=vertices.end (); ++it)
-  {
-    std::swap (it->r, it->b);
-  }
+  //for (CloudIHS::iterator it=vertices.begin (); it!=vertices.end (); ++it)
+  //{
+  //  std::swap (it->r, it->b);
+  //}
 
   triangles.reserve (mesh.sizeFaces ());
   pcl::ihs::detail::FaceVertexMesh::Triangle triangle;
@@ -472,7 +472,7 @@ pcl::ihs::OpenGLViewer::addMesh (const MeshConstPtr& mesh, const std::string& id
 ////////////////////////////////////////////////////////////////////////////////
 
 bool
-pcl::ihs::OpenGLViewer::addMesh (const CloudXYZRGBNormalConstPtr& cloud, const std::string& id, const Eigen::Isometry3d& T)
+pcl::ihs::OpenGLViewer::addMesh (const CloudXYZINormalConstPtr& cloud, const std::string& id, const Eigen::Isometry3d& T)
 {
   if (!cloud)
   {
@@ -507,13 +507,13 @@ pcl::ihs::OpenGLViewer::addMesh (const CloudXYZRGBNormalConstPtr& cloud, const s
   // Helper functor
   struct AddVertex
   {
-    inline int operator () (const PointXYZRGBNormal& pt, CloudIHS& vertices, int& ind_o) const
+    inline int operator () (const PointXYZINormal& pt, CloudIHS& vertices, int& ind_o) const
     {
       if (ind_o == -1)
       {
         ind_o = vertices.size ();
         vertices.push_back (PointIHS (pt, -pt.normal_z));
-        std::swap (vertices.back ().r, vertices.back ().b);
+        //std::swap (vertices.back ().r, vertices.back ().b);
       }
       return (ind_o);
     }
@@ -532,10 +532,10 @@ pcl::ihs::OpenGLViewer::addMesh (const CloudXYZRGBNormalConstPtr& cloud, const s
       ind_o_2 = ind_o_0 + offset_2;
       ind_o_3 = ind_o_0 + offset_3;
 
-      const PointXYZRGBNormal& pt_0 = cloud->operator [] (ind_o_0);
-      const PointXYZRGBNormal& pt_1 = cloud->operator [] (ind_o_1);
-      const PointXYZRGBNormal& pt_2 = cloud->operator [] (ind_o_2);
-      const PointXYZRGBNormal& pt_3 = cloud->operator [] (ind_o_3);
+      const PointXYZINormal& pt_0 = cloud->operator [] (ind_o_0);
+      const PointXYZINormal& pt_1 = cloud->operator [] (ind_o_1);
+      const PointXYZINormal& pt_2 = cloud->operator [] (ind_o_2);
+      const PointXYZINormal& pt_3 = cloud->operator [] (ind_o_3);
 
       if (!boost::math::isnan (pt_1.x) && !boost::math::isnan (pt_3.x))
       {
@@ -922,7 +922,7 @@ pcl::ihs::OpenGLViewer::drawMeshes ()
       {
         case COL_RGB:
         {
-          glColorPointer (3, GL_UNSIGNED_BYTE, sizeof (PointIHS), &(mesh.vertices [0].b));
+          //glColorPointer (3, GL_UNSIGNED_BYTE, sizeof (PointIHS), &(mesh.vertices [0].b));
           break;
         }
         case COL_ONE_COLOR:

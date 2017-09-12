@@ -51,7 +51,7 @@ namespace pcl
     {
       PCL_ADD_POINT4D
       PCL_ADD_NORMAL4D
-      PCL_ADD_RGB
+	  PCL_ADD_INTENSITY
       float        weight;
       unsigned int age;
       uint32_t     directions;
@@ -69,8 +69,7 @@ namespace pcl
 
         this->normal_x = this->normal_y = this->normal_z = std::numeric_limits<float>::quiet_NaN ();
         this->data_n[3] = 0.f;
-
-        this->b = this->g = this->r = 0; this->a = 255;
+		this->intensity = 0;
 
         this->weight     = 0.f;
         this->age        = 0;
@@ -89,14 +88,14 @@ namespace pcl
         this->normal_z  = other.normal_z;
         this->data_n[3] = other.data_n[3];
 
-        this->rgba = other.rgba;
+		this->intensity = other.intensity;
 
         this->weight     = other.weight;
         this->age        = other.age;
         this->directions = other.directions;
       }
 
-      inline PointIHS (const pcl::PointXYZRGBNormal& other, const float weight)
+      inline PointIHS (const pcl::PointXYZINormal& other, const float weight)
       {
         this->x       = other.x;
         this->y       = other.y;
@@ -108,7 +107,7 @@ namespace pcl
         this->normal_z  = other.normal_z;
         this->data_n[3] = other.data_n[3];
 
-        this->rgba = other.rgba;
+		this->intensity = other.intensity;
 
         this->weight     = weight;
         this->age        = 0;
@@ -116,9 +115,9 @@ namespace pcl
       }
 
    // inline       Eigen::Vector3i getRGBVector3i ()       {return (Eigen::Vector3i (r, g, b));}
-      inline const Eigen::Vector3i getRGBVector3i () const {return (Eigen::Vector3i (r, g, b));}
+      //inline const Eigen::Vector3i getRGBVector3i () const {return (Eigen::Vector3i (r, g, b));}
    // inline       Eigen::Vector4i getRGBVector4i ()       {return (Eigen::Vector4i (r, g, b, a));}
-      inline const Eigen::Vector4i getRGBVector4i () const {return (Eigen::Vector4i (r, g, b, a));}
+      //inline const Eigen::Vector4i getRGBVector4i () const {return (Eigen::Vector4i (r, g, b, a));}
     };
 
   } // End namespace ihs

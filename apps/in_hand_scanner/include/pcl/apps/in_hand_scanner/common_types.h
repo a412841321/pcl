@@ -67,7 +67,7 @@ POINT_CLOUD_REGISTER_POINT_STRUCT (pcl::ihs::_PointIHS,
                                    (float, normal_x, normal_x)
                                    (float, normal_y, normal_y)
                                    (float, normal_z, normal_z)
-                                   (float, rgb, rgb)
+								   (float, intensity, intensity)
                                    (float, weight, weight)
                                    (unsigned int, age, age)
                                    (uint32_t, directions, directions)

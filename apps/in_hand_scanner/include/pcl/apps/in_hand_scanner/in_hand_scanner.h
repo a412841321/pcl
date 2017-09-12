@@ -191,15 +191,27 @@ namespace pcl
 
       private:
 
-        typedef pcl::PointXYZRGBA              PointXYZRGBA;
-        typedef pcl::PointCloud <PointXYZRGBA> CloudXYZRGBA;
-        typedef CloudXYZRGBA::Ptr              CloudXYZRGBAPtr;
-        typedef CloudXYZRGBA::ConstPtr         CloudXYZRGBAConstPtr;
+#if 0
+		typedef pcl::PointXYZRGBA              PointXYZRGBA;
+		typedef pcl::PointCloud <PointXYZRGBA> CloudXYZRGBA;
+		typedef CloudXYZRGBA::Ptr              CloudXYZRGBAPtr;
+		typedef CloudXYZRGBA::ConstPtr         CloudXYZRGBAConstPtr;
 
-        typedef pcl::PointXYZRGBNormal              PointXYZRGBNormal;
-        typedef pcl::PointCloud <PointXYZRGBNormal> CloudXYZRGBNormal;
-        typedef CloudXYZRGBNormal::Ptr              CloudXYZRGBNormalPtr;
-        typedef CloudXYZRGBNormal::ConstPtr         CloudXYZRGBNormalConstPtr;
+		typedef pcl::PointXYZRGBNormal              PointXYZRGBNormal;
+		typedef pcl::PointCloud <PointXYZRGBNormal> CloudXYZRGBNormal;
+		typedef CloudXYZRGBNormal::Ptr              CloudXYZRGBNormalPtr;
+		typedef CloudXYZRGBNormal::ConstPtr         CloudXYZRGBNormalConstPtr;
+#else
+        typedef pcl::PointXYZI              PointXYZI;
+        typedef pcl::PointCloud <PointXYZI> CloudXYZI;
+        typedef CloudXYZI::Ptr              CloudXYZIPtr;
+        typedef CloudXYZI::ConstPtr         CloudXYZIConstPtr;
+
+        typedef pcl::PointXYZINormal              PointXYZINormal;
+        typedef pcl::PointCloud <PointXYZINormal> CloudXYZINormal;
+        typedef CloudXYZINormal::Ptr              CloudXYZINormalPtr;
+        typedef CloudXYZINormal::ConstPtr         CloudXYZINormalConstPtr;
+#endif
 
         typedef pcl::ihs::PointIHS         PointIHS;
         typedef pcl::ihs::CloudIHS         CloudIHS;
@@ -210,7 +222,7 @@ namespace pcl
         typedef pcl::ihs::MeshPtr      MeshPtr;
         typedef pcl::ihs::MeshConstPtr MeshConstPtr;
 
-		typedef pcl::io::OpenNI2Grabber                Grabber;
+		typedef pcl::io::OpenNI2Grabber           Grabber;
         typedef boost::shared_ptr <Grabber>       GrabberPtr;
         typedef boost::shared_ptr <const Grabber> GrabberConstPtr;
 
@@ -232,7 +244,7 @@ namespace pcl
 
         /** \brief Called when new data arries from the grabber. The grabbing - registration - integration pipeline is implemented here. */
         void
-        newDataCallback (const CloudXYZRGBAConstPtr& cloud_in);
+        newDataCallback (const CloudXYZIConstPtr& cloud_in);
 
         /** \see http://doc.qt.digia.com/qt/qwidget.html#paintEvent
           * \see http://doc.qt.digia.com/qt/opengl-overpainting.html
