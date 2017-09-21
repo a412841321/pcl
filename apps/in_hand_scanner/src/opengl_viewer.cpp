@@ -114,7 +114,7 @@ pcl::ihs::OpenGLViewer::OpenGLViewer (QWidget* parent)
     vis_conf_norm_       (1),
     drawn_meshes_        (),
     mesh_representation_ (MR_POINTS),
-    coloring_            (COL_RGB),
+	coloring_			 (COL_ONE_COLOR),
     draw_box_            (false),
     box_coefficients_    (),
     scaling_factor_      (1.),

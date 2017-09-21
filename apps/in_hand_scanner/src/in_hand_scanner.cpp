@@ -126,7 +126,7 @@ pcl::ihs::InHandScanner::showUnprocessedData ()
 
   std::cerr << "Showing the unprocessed input data.\n";
   Base::setDrawBox (false);
-  Base::setColoring (Base::COL_RGB);
+  Base::setColoring(Base::COL_ONE_COLOR);
 
   running_mode_ = RM_UNPROCESSED;
   emit runningModeChanged (running_mode_);
@@ -142,7 +142,7 @@ pcl::ihs::InHandScanner::showProcessedData ()
 
   std::cerr << "Showing the processed input data.\n";
   Base::setDrawBox (true);
-  Base::setColoring (Base::COL_RGB);
+  Base::setColoring(Base::COL_ONE_COLOR);
 
   running_mode_ = RM_PROCESSED;
   emit runningModeChanged (running_mode_);
@@ -386,27 +386,27 @@ pcl::ihs::InHandScanner::newDataCallback (const CloudXYZIConstPtr& cloud_in)
 
   if (running_mode_ < RM_REGISTRATION_CONT && cloud_discarded)
   {
-    Base::addMesh (cloud_discarded, "cloud_discarded");
+	  Base::addMesh(cloud_discarded, "cloud_discarded");
   }
   else
   {
-    Base::removeMesh ("cloud_discarded");
+	  Base::removeMesh("cloud_discarded");
   }
-  time_data = sw.getTime ();
+  time_data = sw.getTime();
 
   if (running_mode_ >= RM_REGISTRATION_CONT)
   {
-    std::cerr << "Copy to visualization thread:\n"
-              << "  - time model                     : "
-              << std::setw (8) << std::right << time_model << " ms\n"
-              << "  - time data                      : "
-              << std::setw (8) << std::right << time_data << " ms\n";
+	  std::cerr << "Copy to visualization thread:\n"
+		  << "  - time model                     : "
+		  << std::setw(8) << std::right << time_model << " ms\n"
+		  << "  - time data                      : "
+		  << std::setw(8) << std::right << time_data << " ms\n";
   }
 
   if (running_mode_ == RM_REGISTRATION_SINGLE)
   {
-    lock.unlock ();
-    this->showProcessedData ();
+	  lock.unlock();
+	  this->showProcessedData();
   }
 }
 

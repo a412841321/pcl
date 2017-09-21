@@ -50,8 +50,62 @@
 #include <pcl/io/boost.h>
 #include <pcl/exceptions.h>
 #include <iostream>
+#include <opencv2\core\core.hpp>  
+#include <opencv2\imgproc\imgproc.hpp>  
+#include <opencv2\highgui\highgui.hpp> 
 
 using namespace pcl::io::openni2;
+using namespace cv;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Author: Chris.Shu
+//
+void ComputeRealDepth(cv::Mat &mDepth, float fFx, float fFy, float fCx, float fCy, uint16_t* buffer)
+{
+	const float fInvFx = (fFx != 0.0f) ? (1.0f / fFx) : 1.0f;
+	const float fInvFy = (fFy != 0.0f) ? (1.0f / fFy) : 1.0f;
+
+	for (int i = 0; i < mDepth.rows; ++i)
+	{
+		unsigned short *ptrDepth = mDepth.ptr<unsigned short>(i);
+
+		for (int j = 0; j < mDepth.cols; ++j)
+		{
+			buffer[i*mDepth.cols + j] = (unsigned short)((float)ptrDepth[j] / std::sqrtf((j - fCx) * (j - fCx) * fInvFx * fInvFx + (fCy - i) * (fCy - i) * fInvFy * fInvFy + 1.0f));
+		}
+	}
+}
+
+void ComputeRealDepth(cv::Mat &mDepth, float fFx, float fFy, float fCx, float fCy)
+{
+	const float fInvFx = (fFx != 0.0f) ? (1.0f / fFx) : 1.0f;
+	const float fInvFy = (fFy != 0.0f) ? (1.0f / fFy) : 1.0f;
+
+	for (int i = 0; i < mDepth.rows; ++i)
+	{
+		unsigned short *ptrDepth = mDepth.ptr<unsigned short>(i);
+
+		for (int j = 0; j < mDepth.cols; ++j)
+		{
+			ptrDepth[j] = (unsigned short)((float)ptrDepth[j] / std::sqrtf((j - fCx) * (j - fCx) * fInvFx * fInvFx + (fCy - i) * (fCy - i) * fInvFy * fInvFy + 1.0f));
+		}
+	}
+}
+
+void Mat2Buf(cv::Mat &mDepth, uint16_t* pBuf)
+{
+	for (int i = 0; i < mDepth.rows; ++i)
+	{
+		unsigned short *ptrDepth = mDepth.ptr<unsigned short>(i);
+
+		for (int j = 0; j < mDepth.cols; ++j)
+		{
+			pBuf[i*mDepth.cols+j] = (unsigned short)ptrDepth[j];
+		}
+	}
+}
+
+extern void jointBilateralFilter(InputArray joint_, InputArray src_, OutputArray dst_, int d, double sigmaColor, double sigmaSpace, int borderType);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace
 {
@@ -449,6 +503,12 @@ pcl::io::OpenNI2Grabber::depthCallback (DepthImage::Ptr depth_image, void*)
     num_slots<sig_cb_openni_image_depth_image> () > 0)
     rgb_sync_.add1 (depth_image, depth_image->getTimestamp ());
 
+  cv::Mat MatDepth(depth_image->getHeight(), depth_image->getWidth(), CV_16UC1, (void*)depth_image->getData());
+  depth_resize_buffer_.resize(depth_image->getHeight()*depth_image->getWidth());
+  ComputeRealDepth(MatDepth, 457.85558118191392, 456.50032802101009, 346.29635111762445, 218.52903267597213, (uint16_t*)depth_resize_buffer_.data());
+  const uint16_t* depth_map = (const uint16_t*)depth_image->getData();
+  depth_map = depth_resize_buffer_.data();
+
   if (num_slots<sig_cb_openni_point_cloud_i>  () > 0 ||
     num_slots<sig_cb_openni_ir_depth_image> () > 0)
     ir_sync_.add1 (depth_image, depth_image->getTimestamp ());
@@ -499,6 +559,16 @@ void
 pcl::io::OpenNI2Grabber::irDepthImageCallback (const IRImage::Ptr &ir_image,
   const DepthImage::Ptr &depth_image)
 {
+	cv::Mat MatDepth(depth_image->getHeight(), depth_image->getWidth(), CV_16UC1, (void*)depth_image->getData());
+	cv::Mat MatIR(ir_image->getHeight(), ir_image->getWidth(), CV_16UC1, (void*)ir_image->getData());
+	cv::Mat imgResult;
+	ComputeRealDepth(MatDepth, 457.85558118191392, 456.50032802101009, 346.29635111762445, 218.52903267597213);
+	jointBilateralFilter(MatIR, MatDepth, imgResult, 64, 3, 5, BORDER_REPLICATE);
+	depth_resize_buffer_.resize(depth_image->getHeight()*depth_image->getWidth());
+	Mat2Buf(imgResult, (uint16_t*)depth_resize_buffer_.data());
+	const uint16_t* depth_map = (const uint16_t*)depth_image->getData();
+	depth_map = depth_resize_buffer_.data();
+
   // check if we have color point cloud slots
   if (point_cloud_i_signal_->num_slots () > 0)
     point_cloud_i_signal_->operator ()(convertToXYZIPointCloud (ir_image, depth_image));
